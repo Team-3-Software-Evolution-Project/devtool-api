@@ -3,7 +3,7 @@ from typing import Optional
 
 from fastapi import FastAPI
 
-import git_utils
+import app.git_utils as git_utils
 
 
 app = FastAPI()
