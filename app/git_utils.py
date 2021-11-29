@@ -51,8 +51,8 @@ def execute_command(root: str, command: str):
     # Change CWD back to normal one
     os.chdir(pre_cwd)
 
-    #print(f'root: {root} \ncommand: {command} \noutput: {output}')
-    return output
+    print(f'root: {root} \ncommand: {command} \noutput: {output}')
+    return output.removesuffix('/n').strip()
 
 
 def folder_exists(path: str):

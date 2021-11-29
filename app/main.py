@@ -31,4 +31,4 @@ def analyze_repo(command: str, git_url: str):
 
     output = git_utils.execute_command(repo_path, command)
 
-    return {"result": output.removesuffix('/n').strip(), "file_tree": repo_file_tree}
+    return {"result": output, "file_tree": repo_file_tree}
