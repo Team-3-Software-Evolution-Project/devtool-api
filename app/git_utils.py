@@ -36,8 +36,8 @@ def list_files(startpath: str):
         for f in files:
             full_path = os.path.relpath(root).split('/')[2:]
             path = str('/'.join(full_path)) + f'/{f}'
-            full_command = f'git log -- {path} | wc -l'
-            tree_string += f'\n{subindent}📜{f} [{execute_command(full_startpath, full_command)}]'
+            command = f'git log --oneline -- {path} | wc -l'
+            tree_string += f'\n{subindent}📜{f} [{execute_command(full_startpath, command)}]'
 
     return tree_string.strip('\n')
 
