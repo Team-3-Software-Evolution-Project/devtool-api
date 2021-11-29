@@ -19,8 +19,9 @@ def download_repo(git_url: str):
     return None
 
 
-# Copied from https://stackoverflow.com/a/9728478
-def list_files(startpath):
+# Logic from https://stackoverflow.com/a/9728478
+def list_files(startpath: str):
+    full_startpath = startpath
     if folder_exists(startpath+'/src'):
         startpath += '/src'
     elif folder_exists(startpath+'/lib'):
@@ -30,12 +31,28 @@ def list_files(startpath):
     for root, dirs, files in os.walk(startpath):
         level = root.replace(startpath, '').count(os.sep)
         indent = ' ' * 4 * (level)
-        tree_string += '\n' + ('{}📂{}/'.format(indent, os.path.basename(root)))
+        tree_string += f'\n{indent}📂{os.path.basename(root)}/'
         subindent = ' ' * 4 * (level + 1)
         for f in files:
-            tree_string += '\n' + ('{}📜{}'.format(subindent, f))
+            full_path = os.path.relpath(root).split('\\')[2:]
+            path = str('/'.join(full_path)) + f'/{f}'
+            full_command = f'git log -- {path} | wc -l'
+            tree_string += f'\n{subindent}📜{f} [{execute_command(full_startpath, full_command)}]'
 
     return tree_string.strip('\n')
+
+
+def execute_command(root: str, command: str):
+    pre_cwd = os.getcwd()
+    os.chdir(root)
+    # Execute command in repo directory
+    stream = os.popen(f'{command}')
+    output = stream.read()
+    # Change CWD back to normal one
+    os.chdir(pre_cwd)
+
+    #print(f'root: {root} \ncommand: {command} \noutput: {output}')
+    return output
 
 
 def folder_exists(path: str):

@@ -29,12 +29,6 @@ def analyze_repo(command: str, git_url: str):
     repo_path = git_utils.download_repo(git_url)
     repo_file_tree = git_utils.list_files(repo_path)
 
-    pre_cwd = os.getcwd()
-    os.chdir(repo_path)
-    # Execute command in repo directory
-    stream = os.popen(f'{command}')
-    output = stream.read()
-    # Change CWD back to normal one
-    os.chdir(pre_cwd)
+    output = git_utils.execute_command(repo_path, command)
 
     return {"result": output.removesuffix('/n').strip(), "file_tree": repo_file_tree}
