@@ -36,4 +36,4 @@ def analyze_repo(command: str, git_url: str):
     # Change CWD back to normal one
     os.chdir(pre_cwd)
 
-    return {"result": output.removesuffix('/n')}
+    return {"result": output.removesuffix('/n').strip()}
