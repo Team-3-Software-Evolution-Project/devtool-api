@@ -27,6 +27,7 @@ def read_root():
 @app.get("/analyze")
 def analyze_repo(command: str, git_url: str):
     repo_path = git_utils.download_repo(git_url)
+    repo_file_tree = git_utils.list_files(repo_path)
 
     pre_cwd = os.getcwd()
     os.chdir(repo_path)
@@ -36,4 +37,4 @@ def analyze_repo(command: str, git_url: str):
     # Change CWD back to normal one
     os.chdir(pre_cwd)
 
-    return {"result": output.removesuffix('/n').strip()}
+    return {"result": output.removesuffix('/n').strip(), "file_tree": repo_file_tree}
