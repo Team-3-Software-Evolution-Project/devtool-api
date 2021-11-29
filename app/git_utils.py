@@ -22,13 +22,10 @@ def download_repo(git_url: str):
 # Logic from https://stackoverflow.com/a/9728478
 def list_files(startpath: str):
     full_startpath = startpath
-    prefix = ''
     if folder_exists(startpath+'/src'):
         startpath += '/src'
-        prefix = 'src'
     elif folder_exists(startpath+'/lib'):
         startpath += '/lib'
-        prefix = 'lib'
 
     tree_string = ''
     for root, dirs, files in os.walk(startpath):
@@ -39,9 +36,7 @@ def list_files(startpath: str):
         for f in files:
             full_path = os.path.relpath(root).split('/')[2:]
             path = str('/'.join(full_path)) + f'/{f}'
-            #print(path)
             full_command = f'git log -- {path} | wc -l'
-            #full_command = f'git log -- {path}'
             tree_string += f'\n{subindent}📜{f} [{execute_command(full_startpath, full_command)}]'
 
     return tree_string.strip('\n')
@@ -56,7 +51,7 @@ def execute_command(root: str, command: str):
     # Change CWD back to normal one
     os.chdir(pre_cwd)
 
-    print(f'root: {root} \ncommand: {command} \noutput: {output}')
+    #print(f'root: {root} \ncommand: {command} \noutput: {output}')
     return output.removesuffix('/n').strip()
 
 
