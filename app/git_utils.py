@@ -1,4 +1,5 @@
 import os
+import shutil
 
 from git import Repo
 
@@ -8,6 +9,8 @@ def download_repo(git_url: str):
     download_path = f'./repos/{folder_name}'
 
     if folder_exists(download_path):
+        shutil.rmtree(download_path)
+        download_repo(git_url)
         return download_path
     else:
         try:
@@ -19,7 +22,6 @@ def download_repo(git_url: str):
     return None
 
 
-# Logic from https://stackoverflow.com/a/9728478
 def list_files(startpath: str):
     full_startpath = startpath
     # if folder_exists(startpath+'/src'):
