@@ -1,5 +1,6 @@
 import os
 import shutil
+from typing import Optional
 
 from git import Repo
 
@@ -22,7 +23,7 @@ def download_repo(git_url: str):
     return None
 
 
-def list_files(startpath: str):
+def list_files(startpath: str, after: Optional[str] = None, until: Optional[str] = None):
     full_startpath = startpath
     # if folder_exists(startpath+'/src'):
     #     startpath += '/src'
@@ -43,12 +44,20 @@ def list_files(startpath: str):
                 if len(path.split('/')[0]) == 0:
                     path = path.removeprefix('/')
                 command = f'git log --oneline -- {path} | wc -l'
-                tree_string += f'\n{subindent}📜{f} [{execute_command(full_startpath, command)}]'
+                tree_string += f'\n{subindent}📜{f} [{execute_command(full_startpath, command, after, until)}]'
 
     return tree_string.strip('\n')
 
 
-def execute_command(root: str, command: str):
+def execute_command(root: str, command: str, after: Optional[str] = None, until: Optional[str] = None):
+    if until:
+        commandArray = command.split(' ')
+        commandArray.insert(2, f'--until="{until}"')
+        command = ' '.join(commandArray)
+    if after:
+        commandArray = command.split(' ')
+        commandArray.insert(2, f'--after="{after}"')
+        command = ' '.join(commandArray)
     pre_cwd = os.getcwd()
     os.chdir(root)
     # Execute command in repo directory
