@@ -35,7 +35,9 @@ def list_files(startpath: str, after: Optional[str] = None, until: Optional[str]
         if '.git' not in os.path.relpath(root):
             level = root.replace(startpath, '').count(os.sep)
             indent = ' ' * 4 * (level)
-            tree_string += f'\n{indent}📂{os.path.basename(root)}/'
+            folder_path = str('/'.join(os.path.relpath(root).split('/')[2:]))
+            command = f'git log --oneline -- {folder_path} | wc -l'
+            tree_string += f'\n{indent}📂{os.path.basename(root)}/ [{execute_command(full_startpath, command, after, until)}]'
             subindent = ' ' * 4 * (level + 1)
             for f in files:
                 full_path = os.path.relpath(root).split('/')[2:]
