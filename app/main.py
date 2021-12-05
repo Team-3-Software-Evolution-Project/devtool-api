@@ -31,7 +31,8 @@ def analyze_repo(command: str, git_url: str, after: Optional[str] = None, until:
         raise HTTPException(
             status_code=500, detail=f"Something went wrong when downloading the repository: {git_url}")
 
-    repo_file_tree, average_commits = git_utils.list_files(repo_path, after, until)
+    repo_file_tree, average_commits, median_commits = git_utils.list_files(
+        repo_path, after, until)
     total_commits = git_utils.execute_command(repo_path, command, after, until)
 
-    return {"total_commits": total_commits, "file_tree": repo_file_tree, "average_commits": average_commits}
+    return {"total_commits": total_commits, "file_tree": repo_file_tree, "average_commits": average_commits, "median_commits": median_commits}

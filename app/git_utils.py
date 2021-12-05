@@ -1,6 +1,7 @@
 import os
 import shutil
 from typing import Optional
+from statistics import median
 
 from git import Repo
 
@@ -52,7 +53,7 @@ def list_files(startpath: str, after: Optional[str] = None, until: Optional[str]
                 commit_values.append(int(commits))
                 tree_string += f'\n{subindent}📜{f} [{commits}]'
 
-    return tree_string.strip('\n'), round(sum(commit_values) / len(commit_values), 2)
+    return tree_string.strip('\n'), round(sum(commit_values) / len(commit_values), 2), round(median(commit_values), 2)
 
 
 def execute_command(root: str, command: str, after: Optional[str] = None, until: Optional[str] = None):
